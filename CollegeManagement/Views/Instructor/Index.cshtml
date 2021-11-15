@@ -1,0 +1,19 @@
+﻿@model List<DataLayer.Entities.Instructor>
+<table class="table table-responsive table-bordered">
+    <tr>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Birthday</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Birthday.ToString("yyyy-MM-dd")</td>
+        </tr>
+    }
+</table>
+<script type="text/javascript">
+
+</script>
