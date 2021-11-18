@@ -1,19 +1,52 @@
 ﻿@model List<DataLayer.Entities.Instructor>
-<table class="table table-responsive table-bordered">
+<div id="message"></div>
+<table class="table table-responsive table-bordered" id="table">
     <tr>
         <td>Id</td>
         <td>Name</td>
         <td>Birthday</td>
+        <td>action</td>
     </tr>
-    @foreach (var item in Model)
+    @*@foreach (var item in Model)
     {
         <tr>
             <td>@item.Id</td>
             <td>@item.Name</td>
             <td>@item.Birthday.ToString("yyyy-MM-dd")</td>
         </tr>
-    }
+    }*@
 </table>
 <script type="text/javascript">
+    fetch('/Instructor/GetInstructor/')
+    .then(res=>res.json())
+    .then(data => {
+            data.forEach((e, i) => {
+                var row=table.insertRow(i+1)
+                row.id=e.id
+                var id=row.insertCell(0)
+                var name=row.insertCell(1)
+                var birthday=row.insertCell(2)
+                var action=row.insertCell(3)
+                id.innerHTML=e.id
+                name.innerHTML=e.name
+                birthday.innerHTML=e.birthday
+                action.innerHTML=`<a class="btn btn-danger" onclick="remove(${e.id})">Delete</a>`
+            })
+        }
+        )
 
+    function remove(id) {
+        fetch('/Instructor/Delete/'+id)
+        .then(res=>res.json())
+        .then(data => {
+            var str=`
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+   ${data}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+            `
+            message.innerHTML = str;
+            document.getElementById(id).remove();
+        })
+    }
 </script>
