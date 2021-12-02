@@ -1,4 +1,5 @@
 ﻿using CollegeManagement.Data;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollegeManagement.Controllers
@@ -19,7 +20,15 @@ namespace CollegeManagement.Controllers
 
         public IActionResult GetInstructor()
         {
-            var instructors = _context.Instructors.ToList();
+            var instructors = _context.Instructors
+                .Select(n=>new
+                {
+                    n.Id,
+                    n.Name,
+                    Birthday= n.Birthday.ToString("yyyy-MM-dd")
+                })
+                
+                .ToList();
             return Json(instructors);
         }
 
@@ -27,8 +36,31 @@ namespace CollegeManagement.Controllers
         {
             var instructor = _context.Instructors.Find(id);
             _context.Remove(instructor);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             return Json($"تم حذف  {instructor.Name} بنجاح");
+        }
+        [HttpPost]
+        public IActionResult Add(Instructor instructor)
+        {
+            _context.Add(instructor);
+            _context.SaveChanges();
+            return Json($"{instructor.Id}");
+        }
+        [HttpPost]
+        public IActionResult Update(Instructor newInstructor)
+        {
+            var instructor = _context.Instructors.Find(newInstructor.Id);
+            if (instructor != null)
+            {
+                instructor.Name = newInstructor.Name;
+                instructor.Birthday = newInstructor.Birthday;
+
+                _context.Update(instructor);
+                _context.SaveChanges();
+                return Json($"{instructor.Id}");
+            }
+
+            return Json("error");
         }
     }
 }
