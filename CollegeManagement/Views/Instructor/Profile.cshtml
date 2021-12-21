@@ -1,0 +1,15 @@
+﻿@model DataLayer.Entities.Instructor
+<div class="row">
+    <div class="col-4 ">
+        <div class="card" style="width: 18rem;">
+            <img src="@Model.PhotoUrl" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">
+                    @Model.Birthday.ToString("yyyy-MM-dd")
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-8 ">test</div>
+</div>

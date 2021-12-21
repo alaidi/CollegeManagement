@@ -1,4 +1,5 @@
 ﻿using CollegeManagement.Data;
+using CollegeManagement.Models;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,8 +41,9 @@ namespace CollegeManagement.Controllers
             return Json($"تم حذف  {instructor.Name} بنجاح");
         }
         [HttpPost]
-        public IActionResult Add(Instructor instructor)
+        public IActionResult Add(PersonDTO personDto)
         {
+            Instructor instructor = personDto;
             _context.Add(instructor);
             _context.SaveChanges();
             return Json($"{instructor.Id}");
@@ -61,6 +63,12 @@ namespace CollegeManagement.Controllers
             }
 
             return Json("error");
+        }
+
+        public IActionResult Profile(int id)
+        {
+            var instructor = _context.Instructors.Find(id);
+            return View(instructor);
         }
     }
 }

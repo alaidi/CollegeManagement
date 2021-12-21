@@ -37,7 +37,10 @@
                         <label for="birthday" class="form-label">التولد</label>
                         <input type="date" class="form-control" id="birthday">
                     </div>
-
+                    <div class="mb-3">
+                        <label for="photoUrl" class="form-label">الصورة</label>
+                        <input type="file" class="form-control" id="photoUrl">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -51,108 +54,109 @@
 {
 
 
-<script type="text/javascript">
-    var addPersonModal = new bootstrap.Modal(document.getElementById('addPerson'))
-    var isUpdate=false
-    let personData={}
-    function showModal(title='اضافة',isUpdateValue=false) {
-        isUpdate = isUpdateValue
-        document.getElementById('addPersonModelTitle').innerHTML=title
-        document.getElementById('saveBtn').innerHTML=title
-        if (!isUpdateValue) {
-            document.getElementById('name').value=''
-            document.getElementById('birthday').value=''
-        }
-        addPersonModal.show()
-    }
+    <script type="text/javascript">
+        var addPersonModal = new bootstrap.Modal(document.getElementById('addPerson'))
+        var isUpdate = false
+        let personData = {}
 
-    function showMessage(msg, color='success') {
-        var str = `
+        function showModal(title='اضافة', isUpdateValue=false) {
+            isUpdate = isUpdateValue
+            document.getElementById('addPersonModelTitle').innerHTML = title
+            document.getElementById('saveBtn').innerHTML = title
+            if (!isUpdateValue) {
+                document.getElementById('name').value = ''
+                document.getElementById('birthday').value = ''
+            }
+            addPersonModal.show()
+        }
+
+        function showMessage(msg, color='success') {
+            var str = `
         <div class="alert alert-${color} alert-dismissible fade show" role="alert">
            ${msg}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         `
-        message.innerHTML = str;
-    }
+            message.innerHTML = str;
+        }
 
-    function insertRowIntoTable(person) {
-        var row = table.insertRow(-1)
-        row.id = person.id
-        var id = row.insertCell(-1)
-        var name = row.insertCell(-1)
-        var birthday = row.insertCell(-1)
-        var action = row.insertCell(-1)
-        id.innerHTML = person.id
-        name.innerHTML = person.name
-        birthday.innerHTML = person.birthday
-        action.innerHTML = `<a class="btn btn-danger" onclick="remove(${person.id})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+        function insertRowIntoTable(person) {
+            var row = table.insertRow(-1)
+            row.id = person.id
+            var id = row.insertCell(-1)
+            var name = row.insertCell(-1)
+            var birthday = row.insertCell(-1)
+            var action = row.insertCell(-1)
+            id.innerHTML = `<a href="/Instructor/Profile/${person.id}" target="_blank">${person.id}</a>`
+            name.innerHTML = person.name
+            birthday.innerHTML = person.birthday
+            action.innerHTML = `<a class="btn btn-danger" onclick="remove(${person.id})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
           <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
           <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
         </svg></a>
         <a class="btn btn-primary" onclick="update(${person.id})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
   <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
 </svg></a>`
-    }
-
-    fetch('/Instructor/GetInstructor/')
-        .then(res => res.json())
-        .then(data => {
-                data.forEach((e) => {
-                    insertRowIntoTable(e)
-                })
-            }
-        )
-
-    function remove(id) {
-        fetch('/Instructor/Delete/' + id)
-            .then(res => res.json())
-            .then(data => {
-                showMessage("تم الحذف بنجاح","danger")
-                document.getElementById(id).remove();
-            })
-    }
-
-
-
-    function addUpdate() {
-        var url='/Instructor/Add/'
-        var person = new FormData()
-        person.append('Name', document.getElementById('name').value);
-        person.append('Birthday', document.getElementById('birthday').value);
-        if (isUpdate) {
-            url='/Instructor/Update/'
-            person.append('Id', personData.id);
         }
 
-        fetch(url, { method: 'post', body: person })
+        fetch('/Instructor/GetInstructor/')
             .then(res => res.json())
             .then(data => {
-                addPersonModal.hide()
-                showMessage("تم الاضافة بنجاح")
-                if (isUpdate) {
-                    var tr=document.getElementById(personData.id)
-                    var td=tr.getElementsByTagName('td')
-                    td[1].innerHTML=document.getElementById('name').value
-                    td[2].innerHTML=document.getElementById('birthday').value
-                } else {
-
-                insertRowIntoTable({ 'id': data, 'name': document.getElementById('name').value, 'birthday': document.getElementById('birthday').value })
+                    data.forEach((e) => {
+                        insertRowIntoTable(e)
+                    })
                 }
-            })
-    }
+            )
 
-    function update(id) {
-        var tr=document.getElementById(id)
-        var td=tr.getElementsByTagName('td')
-        var oldName=td[1].innerHTML
-        var oldBirthday=td[2].innerHTML
-        document.getElementById('name').value=oldName
-        document.getElementById('birthday').value=oldBirthday
-        personData={id:id, name:td[1].innerHTML, birthday:td[2].innerHTML}
-        showModal("تحديث",true)
+        function remove(id) {
+            fetch('/Instructor/Delete/' + id)
+                .then(res => res.json())
+                .then(data => {
+                    showMessage("تم الحذف بنجاح", "danger")
+                    document.getElementById(id).remove();
+                })
+        }
 
 
-    }
-</script>
+        function addUpdate() {
+            var url = '/Instructor/Add/'
+            var person = new FormData()
+            person.append('Name', document.getElementById('name').value);
+            person.append('Birthday', document.getElementById('birthday').value);
+            person.append('PhotoUrl', document.getElementById('photoUrl').files[0]);
+            if (isUpdate) {
+                url = '/Instructor/Update/'
+                person.append('Id', personData.id);
+            }
+
+            fetch(url, { method: 'post', body: person })
+                .then(res => res.json())
+                .then(data => {
+                    addPersonModal.hide()
+                    showMessage("تم الاضافة بنجاح")
+                    if (isUpdate) {
+                        var tr = document.getElementById(personData.id)
+                        var td = tr.getElementsByTagName('td')
+                        td[1].innerHTML = document.getElementById('name').value
+                        td[2].innerHTML = document.getElementById('birthday').value
+                    } else {
+
+                        insertRowIntoTable({ 'id': data, 'name': document.getElementById('name').value, 'birthday': document.getElementById('birthday').value })
+                    }
+                })
+        }
+
+        function update(id) {
+            var tr = document.getElementById(id)
+            var td = tr.getElementsByTagName('td')
+            var oldName = td[1].innerHTML
+            var oldBirthday = td[2].innerHTML
+            document.getElementById('name').value = oldName
+            document.getElementById('birthday').value = oldBirthday
+            personData = { id: id, name: td[1].innerHTML, birthday: td[2].innerHTML }
+            showModal("تحديث", true)
+
+
+        }
+    </script>
 }
