@@ -1,5 +1,5 @@
 ﻿namespace DataLayer.Entities;
-public class Student: Person
+public class Student: PersonEntity
 {
 }
 

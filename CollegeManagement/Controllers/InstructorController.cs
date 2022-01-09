@@ -25,8 +25,8 @@ namespace CollegeManagement.Controllers
                 .Select(n=>new
                 {
                     n.Id,
-                    n.Name,
-                    Birthday= n.Birthday.ToString("yyyy-MM-dd")
+                    n.Person.Name,
+                    Birthday= n.Person.Birthday.ToString("yyyy-MM-dd")
                 })
                 
                 .ToList();
@@ -38,7 +38,7 @@ namespace CollegeManagement.Controllers
             var instructor = _context.Instructors.Find(id);
             _context.Remove(instructor);
             _context.SaveChanges();
-            return Json($"تم حذف  {instructor.Name} بنجاح");
+            return Json($"تم حذف  {instructor.Person.Name} بنجاح");
         }
         [HttpPost]
         public IActionResult Add(PersonDTO personDto)
@@ -54,8 +54,8 @@ namespace CollegeManagement.Controllers
             var instructor = _context.Instructors.Find(newInstructor.Id);
             if (instructor != null)
             {
-                instructor.Name = newInstructor.Name;
-                instructor.Birthday = newInstructor.Birthday;
+                instructor.Person.Name = newInstructor.Person.Name;
+                instructor.Person.Birthday = newInstructor.Person.Birthday;
 
                 _context.Update(instructor);
                 _context.SaveChanges();

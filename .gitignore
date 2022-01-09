@@ -363,3 +363,10 @@ MigrationBackup/
 FodyWeavers.xsd
 /CollegeManagement/wwwroot/upload/500ef_abdulhadi1.jpg
 *.jpg
+/DataLayer/Entities/UniversityUser.cs
+/CollegeManagement/Areas/Identity/Pages/Account/Manage
+/CollegeManagement/Areas/Identity/Pages/Account
+/CollegeManagement/Areas/Identity/Pages
+/CollegeManagement/Data/Migrations
+/CollegeManagement/Models/InstuctorDTO.cs
+/CollegeManagement/wwwroot/upload/8d5af_WhatsApp Image 2021-12-21 at 10.22.52 AM (1).jpeg

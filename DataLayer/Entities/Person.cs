@@ -7,3 +7,13 @@ public class Person
     public string PhotoUrl { get; set; }
 }
 
+public class PersonEntity: IEntity
+{
+    public int PersonId { get; set; }
+    public Person Person { get; set; }
+}
+
+public class IEntity
+{
+    public int Id { get; set; }
+}

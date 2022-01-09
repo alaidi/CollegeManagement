@@ -5,7 +5,7 @@ using Student = DataLayer.Entities.Student;
 
 namespace CollegeManagement.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<UniversityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

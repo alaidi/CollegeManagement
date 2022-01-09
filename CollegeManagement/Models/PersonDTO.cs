@@ -13,9 +13,13 @@ public class PersonDTO
         return new Instructor
         {
             Id = vm.Id,
-            Name = vm.Name,
-            Birthday = vm.Birthday,
-            PhotoUrl = FileService.UploadAsync(vm.PhotoUrl).Result
+            Person = new Person
+            {
+                Name = vm.Name,
+                Birthday = vm.Birthday,
+                PhotoUrl = FileService.UploadAsync(vm.PhotoUrl).Result
+
+            }
         };
     }
 }
